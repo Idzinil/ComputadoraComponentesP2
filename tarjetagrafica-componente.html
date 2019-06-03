@@ -1,0 +1,77 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="tarjeta-grafica-componente">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <p on-click = "click">Selecciona la Tarjeta Gráfica: [[tipoTarjetaGrafica]] </p>
+    <template is = "dom-if" if="[[seleccionado]]"> 
+      <h3>Tarjeta Gráfica: </h3>
+      <template is = "dom-repeat" items = "[[tarjetas]]">
+        <p on-click = "selecciona"> [[item.name]]</p>
+      </template>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * `tarjeta-grafica-componente`
+     * Componente para mostrar las características de una computadora. Como su RAM, hdd, procesador y tarjeta gráfica
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class TarjetaGraficaComponente extends Polymer.Element {
+      static get is() { return 'tarjeta-grafica-componente'; }
+      static get properties() {
+        return {
+          tipoTarjetaGrafica: {
+            type: String,
+            notify: true,
+          },
+          tarjetas: {
+            type: Array,
+            value: [],
+          },
+          seleccionado: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      connectedCallback(){
+        super.connectedCallback();
+        this.getAPIInformation();
+      }
+
+      click(){
+        this.set('seleccionado', true);
+      }
+        
+      getAPIInformation() {
+        let request = new XMLHttpRequest();
+        let url = "https://demo6292426.mockable.io/graphicCard";
+        request.open('GET', url);
+        request.send();
+        request.onreadystatechange = () => {
+          if (request.readyState === 4) {
+            console.log(JSON.parse(request.response));
+            this.tarjetas = JSON.parse(request.response).data;
+          }
+        }
+      }
+
+      selecciona(e){
+        this.set('tipoTarjetaGrafica', e.model.item.name);
+        this.seleccionado = false;
+      }
+    };
+
+    window.customElements.define(TarjetaGraficaComponente.is, TarjetaGraficaComponente);
+  </script>
+</dom-module>

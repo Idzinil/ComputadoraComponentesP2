@@ -1,0 +1,77 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="disco-duro-componente">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <p on-click = "click">Selecciona el Disco Duro: [[capacidadDiscoDuro]]</p>
+    <template is = "dom-if" if="[[seleccionado]]"> 
+      <h3>Disco Duro: </h3>
+      <template is = "dom-repeat" items = [[discos]]>
+        <p on-click = "selecciona">[[item.size]]</p>
+      </template>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * `disco-duro-componente`
+     * Componente para mostrar las características de una computadora. Como su RAM, hdd, procesador y tarjeta gráfica
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class DiscoDuroComponente extends Polymer.Element {
+      static get is() { return 'disco-duro-componente'; }
+      static get properties() {
+        return {
+          capacidadDiscoDuro: {
+            type: String,
+            notify: true,
+          },
+          discos: {
+            type: Array,
+            value: []
+          },
+          seleccionado: {
+            type: Boolean,
+            value: false
+          },
+        };
+      }
+
+      connectedCallback(){
+        super.connectedCallback();
+        this.getAPIInformation();
+      }
+
+      click(){
+        this.set('seleccionado', true);
+      };
+
+      getAPIInformation() {
+        let request = new XMLHttpRequest();
+        let url = "https://demo6292426.mockable.io/hddList";
+        request.open('GET', url);
+        request.send();
+        request.onreadystatechange = () => {
+          if (request.readyState === 4) {
+            console.log(JSON.parse(request.response));
+            this.discos = JSON.parse(request.response).data;
+          }
+        }
+      }
+
+      selecciona(e){
+        this.set('capacidadDiscoDuro', e.model.item.size)
+        this.set('seleccionado', false);
+      }
+    }
+
+    window.customElements.define(DiscoDuroComponente.is, DiscoDuroComponente);
+  </script>
+</dom-module>

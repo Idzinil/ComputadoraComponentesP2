@@ -1,0 +1,77 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="procesador-componente">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <p on-click = "click">Selecciona el Procesador: [[nombreProcesador]]</p>
+    <template is = "dom-if" if="[[seleccionado]]"> 
+      <h3>Procesador: </h3>
+      <template is = "dom-repeat" items = "[[procesadores]]">
+        <p on-click = "selecciona">[[item.name]]</p>
+      </template>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * `procesador-componente`
+     * Componente para mostrar las características de una computadora. Como su RAM, hdd, procesador y tarjeta gráfica
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ProcesadorComponente extends Polymer.Element {
+      static get is() { return 'procesador-componente'; }
+      static get properties() {
+        return {
+          nombreProcesador: {
+            type: String,
+            notify: true,
+          },
+          procesadores: {
+            type: Array,
+            value: [],
+          },
+          seleccionado: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      connectedCallback(){
+        super.connectedCallback();
+        this.getAPIInformation();
+      }
+
+      click(){
+        this.set('seleccionado', true);
+      };
+
+      getAPIInformation() {
+        let request = new XMLHttpRequest();
+        let url = "http://demo6292426.mockable.io/processors";
+        request.open('GET', url);
+        request.send();
+        request.onreadystatechange = () => {
+          if (request.readyState === 4) {
+            console.log(JSON.parse(request.response));
+            this.procesadores = JSON.parse(request.response).data;
+          }
+        }
+      }
+
+      selecciona(e){
+        this.set('nombreProcesador', e.model.item.name);
+        this.set('seleccionado', false);
+      }
+    }
+
+    window.customElements.define(ProcesadorComponente.is, ProcesadorComponente);
+  </script>
+</dom-module>

@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="./ram-componente.html">
+<link rel="import" href="./discoduro-componente.html">
+<link rel="import" href="./procesador-componente.html">
+<link rel="import" href="./tarjetagrafica-componente.html">
+
+<dom-module id="computadora-componente">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2 on-click = "encenderCompu">ON</h2>
+    <template is = "dom-if" if="[[!encender]]"> 
+      <ram-componente tamanio-ram = '{{ram}}'></ram-componente>
+      <disco-duro-componente capacidad-disco-duro = '{{discoDuro}}'></disco-duro-componente>
+      <procesador-componente nombre-procesador = '{{procesador}}'></procesador-componente>
+      <tarjeta-grafica-componente tipo-tarjeta-grafica = '{{tarjetaGrafica}}'></tarjeta-grafica-componente>
+    </template>
+    <template is = "dom-if" if="[[encender]]"> 
+      <h3>Bienvenid@ a la computadora de Eunice</h3>
+      <p>La Memoria RAM seleccionada es de: {{ram}}</p>
+      <p>El Disco Duro seleccionado es de: {{discoDuro}}</p>
+      <p>El Procesador seleccionado es: {{procesador}}</p>
+      <p>La Tarjeta Gráfica seleccionada es: {{tarjetaGrafica}}</p>
+      <h2 on-click = "apagarCompu">OFF</h2>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * `computadora-componente`
+     * Componente para mostrar las características de una computadora. Como su RAM, hdd, procesador y tarjeta gráfica
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ComputadoraComponente extends Polymer.Element {
+      static get is() { return 'computadora-componente'; }
+      static get properties() {
+        return {
+          ram: {
+            type: String,
+            value: '4GB-gft'
+          },
+          discoDuro: {
+            type: String,
+            value: '2TB-gft'
+          },
+          procesador: {
+            type: String,
+            value: 'GFT-Procesador'
+          },
+          tarjetaGrafica: {
+            type: String,
+            value: 'GFT-GraphicCard'
+          },
+          encender: {
+            type: Boolean,
+            value: false
+          },
+          apagar: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      encenderCompu(){
+        this.set('encender', true);
+      }
+
+      apagarCompu(){
+        this.set('encender', false);
+      }
+    }
+
+    window.customElements.define(ComputadoraComponente.is, ComputadoraComponente);
+  </script>
+</dom-module>
