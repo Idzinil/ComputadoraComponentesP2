@@ -26,21 +26,28 @@
         overflow: auto;
       }
     </style>
+    <template is="dom-if" if="[[seleccionAlgo]]">
+      <span>Procesador Seleccionado [[procesadorTemp]]</span>
+    </template>
+    <template is="dom-if" if="[[!seleccionAlgo]]">
+      <span>Selecciona Procesador</span>
+    </template>
+
     <paper-button toggles id = "boton" class = "btn" raised on-click = "click">Procesador</paper-button>
     <paper-dialog modal id = "scrolling" class="size-position">
-    <!--<template is = "dom-if" if="[[seleccionado]]"> -->
       <h2>Procesador:</h2>
       <paper-dialog-scrollable>
-        <paper-listbox>
+        
           <template is = "dom-repeat" items = "[[procesadores]]">
-            <piper-item id = "list" on-click = "selecciona">[[item.name]]</piper-item>
+            <paper-listbox>
+              <piper-item id = "list" on-click = "selecciona">[[item.name]]</piper-item>
+            </paper-listbox>
           </template>
-        </paper-listbox>
-    <!--</template>-->
+        
       </paper-dialog-scrollable>
       <div class = "buttons">
         <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button id = "click" dialog-confirm autofocus>Aceptar</paper-button>
+        <paper-button id = "click" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -62,11 +69,19 @@
             type: String,
             notify: true,
           },
+          procesadorTemp:{
+            type: String,
+            notify: true
+          },
           procesadores: {
             type: Array,
             value: [],
           },
           seleccionado: {
+            type: Boolean,
+            value: false
+          },
+          seleccionAlgo: {
             type: Boolean,
             value: false
           }
@@ -92,16 +107,17 @@
 
       selecciona(e){
         this.set('nombreProcesador', e.model.item.name);
-        //this.set('seleccionado', false);
-        //this.$.scrolling.toggle();
-        //this.$.parr.setAttribute(this.$.collapse.closed);
+        this.seleccionAlgo = true;
+        this.set('procesadorTemp', e.model.item.name);
       }
 
       click(){
-        //this.set('seleccionado', true);
-        this.$.scrolling.toggle();
-        //this.$.boton.setAttribute('aria-expanded', this.$.scrolling.opened);
-      };
+        this.shadowRoot.querySelector('#scrolling').open();
+      }
+
+      aceptaClick(){
+        this.set("nombreProcesador", this.procesadorTemp);
+      }
     }
 
     window.customElements.define(ProcesadorComponente.is, ProcesadorComponente);

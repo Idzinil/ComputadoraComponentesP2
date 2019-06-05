@@ -26,22 +26,28 @@
         overflow: auto;
       }
     </style>
+    <template is="dom-if" if="[[seleccionAlgo]]">
+      <span>Tarjeta Gráfica seleccionada [[tarjGraficaTemp]]</span>
+    </template>
+    <template is="dom-if" if="[[!seleccionAlgo]]">
+      <span>Selecciona la Tarjeta Gráfica</span>
+    </template>
+
     <paper-button toggles id = "boton" class= "btn" on-click = "click">Tarjeta Gráfica</paper-button>
     <paper-dialog modal id = "scrolling" class="size-position">
-    <!--<template is = "dom-if" if="[[seleccionado]]"> -->
       <h2>Tarjeta Gráfica:</h2>
       <paper-dialog-scrollable>
-        <paper-listbox>
+        
           <template is = "dom-repeat" items = "[[tarjetas]]">
-            <piper-item id = "lista" on-click = "selecciona">[[item.name]]</piper-item>
-            <br>
+            <paper-listbox>
+              <piper-item id = "lista" on-click = "selecciona">[[item.name]]</piper-item>
+            </paper-listbox>
           </template>
-        </paper-listbox>
-    <!--</template>-->
+
       </paper-dialog-scrollable>
       <div class = "buttons">
         <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button id = "click" dialog-confirm autofocus>Aceptar</paper-button>
+        <paper-button id = "click" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -63,11 +69,18 @@
             type: String,
             notify: true,
           },
+          tarjGraficaTemp: {
+            type: String,
+          },
           tarjetas: {
             type: Array,
             value: [],
           },
           seleccionado: {
+            type: Boolean,
+            value: false
+          },
+          seleccionAlgo: {
             type: Boolean,
             value: false
           }
@@ -86,7 +99,6 @@
         request.send();
         request.onreadystatechange = () => {
           if (request.readyState === 4) {
-            console.log(JSON.parse(request.response));
             this.tarjetas = JSON.parse(request.response).data;
           }
         }
@@ -94,13 +106,16 @@
 
       selecciona(e){
         this.set('tipoTarjetaGrafica', e.model.item.name);
-       // this.seleccionado = false;
+        this.seleccionAlgo = true;
+        this.set('tarjGraficaTemp', e.model.item.name);
       }
 
       click(){
-        //this.set('seleccionado', true);
-        this.$.scrolling.toggle();
-        //this.$.boton.setAttribute('aria-expanded', this.$.scrolling.opened);
+        this.shadowRoot.querySelector('#scrolling').open();
+      }
+
+      aceptaClick(){
+        this.set("tipoTarjetaGrafica", this.tarjGraficaTemp);
       }
         
     };

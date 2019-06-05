@@ -26,20 +26,28 @@
         overflow: auto;
       }
     </style>
-    <paper-button toggles id = "boton" class = "btn" raised on-click = "click">RAM</paper-button>
+    <template is="dom-if" if="[[seleccionAlgo]]">
+      <span>RAM Seleccionada [[tamanioRamTemp]]</span>
+    </template>
+    <template is="dom-if" if="[[!seleccionAlgo]]">
+      <span>Selecciona RAM</span>
+    </template>
+    
+    <paper-button toggles id = "botonRam" class = "btn" raised on-click = "click">RAM</paper-button>
     <paper-dialog modal id = "scrolling" class = "size-position">
       <h2>Memoria RAM:</h2>
       <paper-dialog-scrollable>
-        <paper-listbox>
+      
           <template is = "dom-repeat" items = "[[rams]]">
-            <piper-item id = "lista" on-click = "selecciona">[[item.ramMemory]]</piper-item>
-            <br>
+            <paper-listbox>
+              <piper-item id = "lista" on-click = "selecciona">[[item.ramMemory]]</piper-item>
+            </paper-listbox>
           </template>
-        </paper-listbox>
+        
       </paper-dialog-scrollable>
       <div class = "buttons">
         <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button id = "click" dialog-confirm autofocus>Aceptar</paper-button>
+        <paper-button id = "aceptar" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -60,6 +68,9 @@
           tamanioRam: {
             type: String,
             notify: true
+          },
+          tamanioRamTemp: {
+            type: String,
           },
           rams: {
             type: Array,
@@ -95,10 +106,16 @@
 
       selecciona(e){
         this.set('tamanioRam', e.model.item.ramMemory);
+        this.seleccionAlgo = true;
+        this.set('tamanioRamTemp', e.model.item.ramMemory);
       }
 
       click(){
-        this.$.scrolling.toggle();
+        this.shadowRoot.querySelector('#scrolling').open();
+      }
+
+      aceptaClick(){
+        this.set("tamanioRam", this.tamanioRamTemp);
       }
     }
     window.customElements.define(RamComponente.is, RamComponente);
