@@ -1,4 +1,8 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
 
 <dom-module id="disco-duro-componente">
   <template>
@@ -6,14 +10,37 @@
       :host {
         display: block;
       }
+      paper-button.btn {
+        background-color: var(--paper-green-300);
+        color: white;
+      }
+      paper-button.btn[active] {
+        background-color: var(--paper-indigo-300);
+      }
+      paper-dialog.size-position {
+        position: fixed;
+        top: center;
+        right: center;
+        width: 300px;
+        height: 500px;
+        overflow: auto;
+      }
     </style>
-    <p on-click = "click">Selecciona el Disco Duro: [[capacidadDiscoDuro]]</p>
-    <template is = "dom-if" if="[[seleccionado]]"> 
-      <h3>Disco Duro: </h3>
-      <template is = "dom-repeat" items = [[discos]]>
-        <p on-click = "selecciona">[[item.size]]</p>
-      </template>
-    </template>
+    <paper-button toggles id = "boton" class = "btn" raised on-click = "click">Disco Duro</paper-button>
+    <paper-dialog modal id = "scrolling" class = "size-position">
+      <h2>Disco Duro:</h2>
+      <paper-dialog-scrollable>
+        <paper-listbox>
+          <template is = "dom-repeat" items = [[discos]]>
+            <paper-item id = "lista" on-click = "selecciona">[[item.size]]</paper-item>
+          </template>
+        </paper-listbox>
+      </paper-dialog-scrollable>
+      <div class = "buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button id = "click" dialog-confirm autofocus>Aceptar</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 
   <script>
@@ -31,7 +58,7 @@
         return {
           capacidadDiscoDuro: {
             type: String,
-            notify: true,
+            notify: true
           },
           discos: {
             type: Array,
@@ -40,7 +67,7 @@
           seleccionado: {
             type: Boolean,
             value: false
-          },
+          }
         };
       }
 
@@ -49,10 +76,6 @@
         this.getAPIInformation();
       }
 
-      click(){
-        this.set('seleccionado', true);
-      };
-
       getAPIInformation() {
         let request = new XMLHttpRequest();
         let url = "https://demo6292426.mockable.io/hddList";
@@ -60,18 +83,19 @@
         request.send();
         request.onreadystatechange = () => {
           if (request.readyState === 4) {
-            console.log(JSON.parse(request.response));
             this.discos = JSON.parse(request.response).data;
           }
         }
       }
 
       selecciona(e){
-        this.set('capacidadDiscoDuro', e.model.item.size)
-        this.set('seleccionado', false);
+        this.set('capacidadDiscoDuro', e.model.item.size);
+      }
+
+      click(){
+        this.$.scrolling.toggle();
       }
     }
-
     window.customElements.define(DiscoDuroComponente.is, DiscoDuroComponente);
   </script>
 </dom-module>
