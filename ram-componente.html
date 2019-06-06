@@ -25,31 +25,41 @@
         height: 500px;
         overflow: auto;
       }
+      .posicion {
+        @apply --estilos;
+      }
     </style>
-    <template is="dom-if" if="[[seleccionAlgo]]">
-      <span>RAM Seleccionada [[tamanioRamTemp]]</span>
-    </template>
-    <template is="dom-if" if="[[!seleccionAlgo]]">
-      <span>Selecciona RAM</span>
-    </template>
+
+    <div class = "posicion">
+      <div>
+        <template is="dom-if" if="[[seleccionAlgo]]">
+          <span>RAM Seleccionada [[tamanioRamTemp]]</span>
+        </template>
+        <template is="dom-if" if="[[!seleccionAlgo]]">
+          <span>Selecciona RAM</span>
+        </template>
+      </div>
+
+      <div>
+        <paper-button toggles id = "boton" class = "btn" raised on-click = "click">RAM</paper-button>
+      </div>
+    </div>
     
-    <paper-button toggles id = "botonRam" class = "btn" raised on-click = "click">RAM</paper-button>
     <paper-dialog modal id = "scrolling" class = "size-position">
       <h2>Memoria RAM:</h2>
       <paper-dialog-scrollable>
-      
+        <paper-listbox>
           <template is = "dom-repeat" items = "[[rams]]">
-            <paper-listbox>
-              <piper-item id = "lista" on-click = "selecciona">[[item.ramMemory]]</piper-item>
-            </paper-listbox>
+            <paper-item id = "lista" on-click = "selecciona">[[item.ramMemory]]</paper-item>
           </template>
-        
+        </paper-listbox>
       </paper-dialog-scrollable>
       <div class = "buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button on-click = "cancelarClick">Cancelar</paper-button>
         <paper-button id = "aceptar" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
+  
   </template>
 
   <script>
@@ -105,8 +115,7 @@
       }
 
       selecciona(e){
-        this.set('tamanioRam', e.model.item.ramMemory);
-        this.seleccionAlgo = true;
+        this.set('seleccionAlgo', true);
         this.set('tamanioRamTemp', e.model.item.ramMemory);
       }
 
@@ -116,6 +125,12 @@
 
       aceptaClick(){
         this.set("tamanioRam", this.tamanioRamTemp);
+      }
+
+      cancelarClick(){
+        this.shadowRoot.querySelector('#scrolling').close();
+        this.set('seleccionAlgo', false);
+        this.set('tamanioRamTemp', '');
       }
     }
     window.customElements.define(RamComponente.is, RamComponente);

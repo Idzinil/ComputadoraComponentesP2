@@ -25,28 +25,37 @@
         height: 500px;
         overflow: auto;
       }
+      .posicion {
+        @apply --estilos;
+      }
     </style>
-    <template is="dom-if" if="[[seleccionAlgo]]">
-      <span>Procesador Seleccionado [[procesadorTemp]]</span>
-    </template>
-    <template is="dom-if" if="[[!seleccionAlgo]]">
-      <span>Selecciona Procesador</span>
-    </template>
 
-    <paper-button toggles id = "boton" class = "btn" raised on-click = "click">Procesador</paper-button>
+    <div class = "posicion">
+      <div>
+        <template is="dom-if" if="[[seleccionAlgo]]">
+          <span>Procesador Seleccionado [[procesadorTemp]]</span>
+        </template>
+        <template is="dom-if" if="[[!seleccionAlgo]]">
+          <span>Selecciona Procesador</span>
+        </template>
+      </div>
+
+      <div>
+        <paper-button toggles id = "boton" class = "btn" raised on-click = "click">Procesador</paper-button>
+      </div>
+    </div>
+
     <paper-dialog modal id = "scrolling" class="size-position">
       <h2>Procesador:</h2>
       <paper-dialog-scrollable>
-        
+        <paper-listbox>
           <template is = "dom-repeat" items = "[[procesadores]]">
-            <paper-listbox>
-              <piper-item id = "list" on-click = "selecciona">[[item.name]]</piper-item>
-            </paper-listbox>
+            <paper-item id = "list" on-click = "selecciona">[[item.name]]</paper-item>
           </template>
-        
+        </paper-listbox>
       </paper-dialog-scrollable>
       <div class = "buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button on-click = "cancelarClick">Cancelar</paper-button>
         <paper-button id = "click" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
@@ -106,8 +115,7 @@
       }
 
       selecciona(e){
-        this.set('nombreProcesador', e.model.item.name);
-        this.seleccionAlgo = true;
+        this.set('seleccionAlgo',true);
         this.set('procesadorTemp', e.model.item.name);
       }
 
@@ -117,6 +125,12 @@
 
       aceptaClick(){
         this.set("nombreProcesador", this.procesadorTemp);
+      }
+
+      cancelarClick(){
+        this.shadowRoot.querySelector('#scrolling').close();
+        this.set('seleccionAlgo', false);
+        this.set('procesadorTemp', '');
       }
     }
 

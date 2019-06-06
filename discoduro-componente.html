@@ -25,29 +25,38 @@
         height: 500px;
         overflow: auto;
       }
+      .posicion {
+        @apply --estilos;
+      }
     </style>
-    <template is="dom-if" if="[[seleccionAlgo]]">
-      <span>Disco Duro Seleccionado: [[discoDuroTemp]]</span>
-    </template>
-    <template is="dom-if" if="[[!seleccionAlgo]]">
-      <span>Selecciona Disco Duro</span>
-    </template>
-    
-    <paper-button toggles id = "boton" class = "btn" raised on-click = "click">Disco Duro</paper-button>
+
+    <div class = "posicion">
+      <div>
+        <template is="dom-if" if="[[seleccionAlgo]]">
+          <span>Disco Duro Seleccionado: [[discoDuroTemp]]</span>
+        </template>
+        <template is="dom-if" if="[[!seleccionAlgo]]">
+          <span>Selecciona Disco Duro</span>
+        </template>
+      </div>
+
+      <div>
+        <paper-button toggles id = "boton" class = "btn" raised on-click = "click">Disco Duro</paper-button>
+      </div>
+    </div>
+
     <paper-dialog modal id = "scrolling" class = "size-position">
       <h2>Disco Duro:</h2>
       <paper-dialog-scrollable>
-        
-          <template is = "dom-repeat" items = [[discos]]>
-            <paper-listbox>
-              <paper-item id = "lista" on-click = "selecciona">[[item.size]]</paper-item>
-            </paper-listbox>
+        <paper-listbox>
+          <template is = "dom-repeat" items = "[[discos]]">
+            <paper-item id = "lista" on-click = "selecciona">[[item.size]]</paper-item>
           </template>
-        
+        </paper-listbox>
       </paper-dialog-scrollable>
       <div class = "buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button id = "click" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
+        <paper-button on-click = "cancelarClick">Cancelar</paper-button>
+        <paper-button id = "aceptar" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -86,7 +95,7 @@
           }
         };
       }
-
+      
       connectedCallback(){
         super.connectedCallback();
         this.getAPIInformation();
@@ -105,8 +114,7 @@
       }
 
       selecciona(e){
-        this.set('capacidadDiscoDuro', e.model.item.size);
-        this.seleccionAlgo = true;
+        this.set('seleccionAlgo', true);
         this.set('discoDuroTemp', e.model.item.size);
       }
 
@@ -116,6 +124,12 @@
 
       aceptaClick(){
         this.set("capacidadDiscoDuro", this.discoDuroTemp);
+      }
+
+      cancelarClick(){
+        this.shadowRoot.querySelector('#scrolling').close();
+        this.set('seleccionAlgo', false);
+        this.set('discoDuroTemp', '');
       }
     }
     window.customElements.define(DiscoDuroComponente.is, DiscoDuroComponente);

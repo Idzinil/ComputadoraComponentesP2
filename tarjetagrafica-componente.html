@@ -25,29 +25,38 @@
         height: 500px;
         overflow: auto;
       }
+      .posicion {
+        @apply --estilos;
+      }
     </style>
-    <template is="dom-if" if="[[seleccionAlgo]]">
-      <span>Tarjeta Gráfica seleccionada [[tarjGraficaTemp]]</span>
-    </template>
-    <template is="dom-if" if="[[!seleccionAlgo]]">
-      <span>Selecciona la Tarjeta Gráfica</span>
-    </template>
 
-    <paper-button toggles id = "boton" class= "btn" on-click = "click">Tarjeta Gráfica</paper-button>
-    <paper-dialog modal id = "scrolling" class="size-position">
+    <div class = "posicion">
+      <div>
+        <template is="dom-if" if="[[seleccionAlgo]]">
+          <span>Tarjeta Gráfica seleccionada [[tarjGraficaTemp]]</span>
+        </template>
+        <template is="dom-if" if="[[!seleccionAlgo]]">
+          <span>Selecciona la Tarjeta Gráfica</span>
+        </template>
+      </div>
+      
+      <div>
+        <paper-button toggles id = "boton" class= "btn" raised on-click = "click">Tarjeta Gráfica</paper-button>
+      </div>
+    </div>
+
+    <paper-dialog modal id = "scrolling" class = "size-position">
       <h2>Tarjeta Gráfica:</h2>
       <paper-dialog-scrollable>
-        
+        <paper-listbox>
           <template is = "dom-repeat" items = "[[tarjetas]]">
-            <paper-listbox>
-              <piper-item id = "lista" on-click = "selecciona">[[item.name]]</piper-item>
-            </paper-listbox>
+            <paper-item id = "lista" on-click = "selecciona">[[item.name]]</paper-item>
           </template>
-
+        </paper-listbox>
       </paper-dialog-scrollable>
       <div class = "buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button id = "click" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
+        <paper-button on-click = "cancelarClick">Cancelar</paper-button>
+        <paper-button id = "aceptar" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -105,8 +114,7 @@
       }
 
       selecciona(e){
-        this.set('tipoTarjetaGrafica', e.model.item.name);
-        this.seleccionAlgo = true;
+        this.set('seleccionAlgo', true);
         this.set('tarjGraficaTemp', e.model.item.name);
       }
 
@@ -116,10 +124,14 @@
 
       aceptaClick(){
         this.set("tipoTarjetaGrafica", this.tarjGraficaTemp);
+      }   
+      
+      cancelarClick(){
+        this.shadowRoot.querySelector('#scrolling').close();
+        this.seleccionAlgo = false;
+        this.set('tarjGraficaTemp', )
       }
-        
-    };
-
+    }
     window.customElements.define(TarjetaGraficaComponente.is, TarjetaGraficaComponente);
   </script>
 </dom-module>

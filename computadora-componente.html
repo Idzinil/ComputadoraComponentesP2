@@ -19,20 +19,26 @@
     <style>
       :host {
         display: block;
+        --estilos: {
+          display: flex;
+        justify-content: space-between;
+        align-content: center;
+        align-items: center;
+        }
       }
-      paper-toggle-button.green {
+      paper-toggle-button.togbtn {
       --paper-toggle-button-checked-bar-color:  var(--paper-green-500);
       --paper-toggle-button-checked-button-color:  var(--paper-green-500);
       --paper-toggle-button-checked-ink-color: var(--paper-green-500);
-      --paper-toggle-button-unchecked-bar-color:  var(--paper-teal-500);
-      --paper-toggle-button-unchecked-button-color:  var(--paper-teal-500);
-      --paper-toggle-button-unchecked-ink-color: var(--paper-teal-500);
+      --paper-toggle-button-unchecked-bar-color:  var(--paper-red-500);
+      --paper-toggle-button-unchecked-button-color:  var(--paper-red-500);
+      --paper-toggle-button-unchecked-ink-color: var(--paper-red-500);
     }
     </style>
     
     <paper-card heading = "Computadora IEPZ">
       <div class = "card-content">
-        <paper-toggle-button class = "green" on-click = "encenderCompu"></paper-toggle-button>
+        <paper-toggle-button class = "togbtn" on-click = "encenderCompu"></paper-toggle-button>
         <iron-collapse id = "collapse">
           <h4>Bienvenid@ a la computadora de Eunice</h4>
           <paper-icon-button id = "ram" src = "https://img.icons8.com/ultraviolet/100/000000/smartphone-ram.png"></paper-icon-button>
