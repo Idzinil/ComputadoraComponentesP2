@@ -27,7 +27,7 @@
       }
     </style>
     <template is="dom-if" if="[[seleccionAlgo]]">
-      <span>Disco Duro Seleccionado [[discoDuroTemp]]</span>
+      <span>Disco Duro Seleccionado: [[discoDuroTemp]]</span>
     </template>
     <template is="dom-if" if="[[!seleccionAlgo]]">
       <span>Selecciona Disco Duro</span>
@@ -107,7 +107,7 @@
       selecciona(e){
         this.set('capacidadDiscoDuro', e.model.item.size);
         this.seleccionAlgo = true;
-        this.set('tamanioRamTemp', e.model.item.size);
+        this.set('discoDuroTemp', e.model.item.size);
       }
 
       click(){
@@ -115,7 +115,7 @@
       }
 
       aceptaClick(){
-        this.set("tamanioRam", this.tamanioRamTemp);
+        this.set("capacidadDiscoDuro", this.discoDuroTemp);
       }
     }
     window.customElements.define(DiscoDuroComponente.is, DiscoDuroComponente);
