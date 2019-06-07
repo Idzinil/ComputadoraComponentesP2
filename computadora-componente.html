@@ -36,10 +36,10 @@
     }
     </style>
     
-    <paper-card heading = "Computadora IEPZ">
-      <div class = "card-content">
-        <paper-toggle-button class = "togbtn" on-click = "encenderCompu"></paper-toggle-button>
-        <iron-collapse id = "collapse">
+    <paper-card heading="Computadora IEPZ">
+      <div class="card-content">
+        <paper-toggle-button class="togbtn" on-click="encenderCompu"></paper-toggle-button>
+        <iron-collapse id="collapse">
           <h4>Bienvenid@ a la computadora de Eunice</h4>
           <paper-icon-button id = "ram" src = "https://img.icons8.com/ultraviolet/100/000000/smartphone-ram.png"></paper-icon-button>
           <paper-tooltip position="left" for="ram" offset="0"> RAM: {{ram}} </paper-tooltip>
@@ -52,19 +52,19 @@
         </iron-collapse>
       </div>
       
-      <template is = "dom-if" if="[[!computadoraPrendida]]">
+      <template is="dom-if" if="[[!computadoraPrendida]]">
         <div class="card-actions">
-          <ram-componente tamanio-ram = '{{ram}}'></ram-componente>
+          <ram-componente tamanio-ram='{{ram}}'></ram-componente>
         </div>
 
         <div class="card-actions">
-          <procesador-componente nombre-procesador = '{{procesador}}'></procesador-componente>
+          <procesador-componente nombre-procesador='{{procesador}}'></procesador-componente>
         </div>
         <div class="card-actions">
-          <tarjeta-grafica-componente tipo-tarjeta-grafica = '{{tarjetaGrafica}}'></tarjeta-grafica-componente>
+          <tarjeta-grafica-componente tipo-tarjeta-grafica='{{tarjetaGrafica}}'></tarjeta-grafica-componente>
         </div>
         <div class="card-actions">
-          <disco-duro-componente capacidad-disco-duro = '{{discoDuro}}'></disco-duro-componente>
+          <disco-duro-componente capacidad-disco-duro='{{discoDuro}}'></disco-duro-componente>
         </div>
       </template>
     </paper-card>

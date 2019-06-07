@@ -30,7 +30,7 @@
       }
     </style>
 
-    <div class = "posicion">
+    <div class="posicion">
       <div>
         <template is="dom-if" if="[[seleccionAlgo]]">
           <span>RAM Seleccionada [[tamanioRamTemp]]</span>
@@ -41,22 +41,22 @@
       </div>
 
       <div>
-        <paper-button toggles id = "boton" class = "btn" raised on-click = "click">RAM</paper-button>
+        <paper-button toggles id="boton" class="btn" raised on-click="click">RAM</paper-button>
       </div>
     </div>
     
-    <paper-dialog modal id = "scrolling" class = "size-position">
+    <paper-dialog modal id="scrolling" class="size-position">
       <h2>Memoria RAM:</h2>
       <paper-dialog-scrollable>
         <paper-listbox>
-          <template is = "dom-repeat" items = "[[rams]]">
-            <paper-item id = "lista" on-click = "selecciona">[[item.ramMemory]]</paper-item>
+          <template is="dom-repeat" items="[[rams]]">
+            <paper-item id="lista" on-click="selecciona">[[item.ramMemory]]</paper-item>
           </template>
         </paper-listbox>
       </paper-dialog-scrollable>
-      <div class = "buttons">
-        <paper-button on-click = "cancelarClick">Cancelar</paper-button>
-        <paper-button id = "aceptar" dialog-confirm autofocus on-click = "aceptaClick">Aceptar</paper-button>
+      <div class="buttons">
+        <paper-button on-click="cancelarClick">Cancelar</paper-button>
+        <paper-button id="aceptar" dialog-confirm autofocus on-click="aceptaClick">Aceptar</paper-button>
       </div>
     </paper-dialog>
   
